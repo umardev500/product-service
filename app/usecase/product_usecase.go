@@ -54,7 +54,7 @@ func (pu *ProductUsecase) Create(req *pb.ProductCreateRequest) (err error) {
 	// Get the current time in UTC
 	t := time.Now().UTC()
 
-	generatedId := strconv.Itoa(int(t.Unix()))
+	generatedId := strconv.Itoa(int(t.UnixNano()))
 	createdTime := t.Unix()
 
 	err = pu.repository.Save(req, generatedId, createdTime)
