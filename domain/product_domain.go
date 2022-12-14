@@ -20,6 +20,7 @@ type ProductUsecase interface {
 	Delete(req *pb.ProductDeleteRequest) (affected bool, err error)
 	Update(req *pb.ProductUpdateRequest) (affected bool, err error)
 	FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error)
+	FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error)
 }
 
 // ProductRepository is an interface that defines the actions that can be performed on the repository
@@ -30,4 +31,5 @@ type ProductRepository interface {
 	Delete(req *pb.ProductDeleteRequest) (affected bool, err error)
 	Update(req *pb.ProductUpdateRequest, updatedTime int64) (affected bool, err error)
 	FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error)
+	FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error)
 }

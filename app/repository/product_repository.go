@@ -2,12 +2,16 @@ package repository
 
 import (
 	"context"
+	"fmt"
+	"math"
 	"product/domain"
 	"product/pb"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type ProductRepository struct {
@@ -23,6 +27,91 @@ func NewProductRepository(db *mongo.Database) domain.ProductRepository {
 }
 
 // func (pr *ProductRepository) {}
+
+func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error) {
+	s := req.Search
+	products = &pb.ProductFindAllResponse{}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{}
+	findOpt := options.Find()
+
+	if s != "" {
+		filter = bson.M{
+			"$or": []bson.M{
+				{
+					"product_id": bson.M{
+						"$regex": primitive.Regex{
+							Pattern: s,
+							Options: "i",
+						},
+					},
+				},
+			},
+		}
+	}
+
+	page := req.Page
+	perPage := req.PerPage
+	offset := page * perPage
+
+	findOpt.SetSkip(offset)
+	findOpt.SetLimit(perPage)
+
+	if req.Sort == "desc" {
+		findOpt.SetSort(bson.M{"product_id": -1})
+	}
+
+	cur, err := pr.products.Find(ctx, filter, findOpt)
+	if err != nil {
+		return
+	}
+
+	defer cur.Close(ctx)
+
+	for cur.Next(ctx) {
+		var each domain.Product
+
+		err = cur.Decode(&each)
+		if err != nil {
+			return
+		}
+
+		product := &pb.Product{
+			ProductId:   each.ProductId,
+			Name:        each.Name,
+			Price:       each.Price,
+			Duration:    each.Duration,
+			Description: each.Description,
+			CreatedAt:   each.CreatedAt,
+			UpdatedAt:   each.UpdatedAt,
+		}
+
+		products.Products = append(products.Products, product)
+	}
+
+	rows, _ := pr.products.CountDocuments(ctx, filter)
+
+	dataSize := int64(len(products.Products))
+	products.Rows = rows
+	products.Pages = int64(math.Ceil(float64(rows) / float64(perPage)))
+	if products.Pages < 1 {
+		products.Pages = 1
+	}
+
+	products.PerPage = perPage
+	products.ActivePage = page + 1
+	if dataSize < 1 {
+		products.ActivePage = 0
+	}
+	products.Total = dataSize
+
+	fmt.Println("perpage", perPage)
+
+	return
+}
 
 func (pr *ProductRepository) FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error) {
 	var result domain.Product

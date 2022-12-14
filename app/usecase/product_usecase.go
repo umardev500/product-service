@@ -22,6 +22,12 @@ func NewProductUsecase(repo domain.ProductRepository) domain.ProductUsecase {
 
 // func (pu *ProductUsecase) {}
 
+func (pu *ProductUsecase) FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error) {
+	products, err = pu.repository.FindAll(req)
+
+	return
+}
+
 func (pu *ProductUsecase) FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error) {
 	product, err = pu.repository.FindOne(req)
 

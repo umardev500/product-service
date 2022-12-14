@@ -38,9 +38,26 @@ message ProductFindOneRequest {
     string product_id = 1;
 }
 
+message ProductFindAllRequest {
+    string sort = 1;
+    int64 page = 2;
+    int64 perPage = 3;
+    string search = 4;
+}
+
+message ProductFindAllResponse {
+    repeated Product products = 1;
+    int64 rows = 2;
+    int64 pages = 3;
+    int64 perPage = 4;
+    int64 activePage = 5;
+    int64 total = 6;
+}
+
 service ProductService {
     rpc Create(ProductCreateRequest) returns (Empty) {}
     rpc Delete(ProductDeleteRequest) returns (OperationResponse) {}
     rpc Update(ProductUpdateRequest) returns (OperationResponse) {}
     rpc FindOne(ProductFindOneRequest) returns (Product) {}
+    rpc FindAll(ProductFindAllRequest) returns (ProductFindAllResponse) {}
 }
