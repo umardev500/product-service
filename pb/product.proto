@@ -34,8 +34,13 @@ message ProductUpdateRequest {
     string product_id = 2;
 }
 
+message ProductFindOneRequest {
+    string product_id = 1;
+}
+
 service ProductService {
     rpc Create(ProductCreateRequest) returns (Empty) {}
     rpc Delete(ProductDeleteRequest) returns (OperationResponse) {}
     rpc Update(ProductUpdateRequest) returns (OperationResponse) {}
+    rpc FindOne(ProductFindOneRequest) returns (Product) {}
 }

@@ -22,6 +22,12 @@ func NewProductUsecase(repo domain.ProductRepository) domain.ProductUsecase {
 
 // func (pu *ProductUsecase) {}
 
+func (pu *ProductUsecase) FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error) {
+	product, err = pu.repository.FindOne(req)
+
+	return
+}
+
 func (pu *ProductUsecase) Update(req *pb.ProductUpdateRequest) (affected bool, err error) {
 	t := time.Now()
 	updatedTime := t.Unix()

@@ -24,6 +24,32 @@ func NewProductRepository(db *mongo.Database) domain.ProductRepository {
 
 // func (pr *ProductRepository) {}
 
+func (pr *ProductRepository) FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error) {
+	var result domain.Product
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"product_id": req.ProductId}
+
+	err = pr.products.FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return
+	}
+
+	product = &pb.Product{
+		ProductId:   result.ProductId,
+		Name:        result.Name,
+		Price:       result.Price,
+		Duration:    result.Duration,
+		Description: result.Description,
+		CreatedAt:   result.CreatedAt,
+		UpdatedAt:   result.UpdatedAt,
+	}
+
+	return
+}
+
 func (pr *ProductRepository) Update(req *pb.ProductUpdateRequest, updatedTime int64) (affected bool, err error) {
 	affected = true
 

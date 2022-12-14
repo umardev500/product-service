@@ -19,6 +19,12 @@ func NewProductDelivery(usecase domain.ProductUsecase) *ProductDelivery {
 
 //func (pd *ProductDelivery) Delete(ctx context.Context, req *pb.) (res *pb., err error) {}
 
+func (pd *ProductDelivery) FindOne(ctx context.Context, req *pb.ProductFindOneRequest) (res *pb.Product, err error) {
+	res, err = pd.usecase.FindOne(req)
+
+	return
+}
+
 func (pd *ProductDelivery) Update(ctx context.Context, req *pb.ProductUpdateRequest) (res *pb.OperationResponse, err error) {
 	affected, err := pd.usecase.Update(req)
 	res = &pb.OperationResponse{IsAffected: affected}
