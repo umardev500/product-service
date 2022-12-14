@@ -14,3 +14,6 @@ create:
 
 delete:
 	grpcurl --plaintext -d '{"product_id": "1671033950"}' localhost:5010 ProductService.Delete
+
+update:
+	grpcurl --plaintext -d '{"product_id": "1671034841", "detail": {"name": "The name of product updated", "price": 0, "duration": 30, "description": "The updated description"}}' localhost:5010 ProductService.Update

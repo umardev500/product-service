@@ -29,7 +29,13 @@ message ProductDeleteRequest {
     string product_id = 1;
 }
 
+message ProductUpdateRequest {
+    ProductCreateRequest detail = 1;
+    string product_id = 2;
+}
+
 service ProductService {
     rpc Create(ProductCreateRequest) returns (Empty) {}
     rpc Delete(ProductDeleteRequest) returns (OperationResponse) {}
+    rpc Update(ProductUpdateRequest) returns (OperationResponse) {}
 }

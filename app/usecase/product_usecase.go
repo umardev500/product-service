@@ -20,6 +20,17 @@ func NewProductUsecase(repo domain.ProductRepository) domain.ProductUsecase {
 	}
 }
 
+// func (pu *ProductUsecase) {}
+
+func (pu *ProductUsecase) Update(req *pb.ProductUpdateRequest) (affected bool, err error) {
+	t := time.Now()
+	updatedTime := t.Unix()
+
+	affected, err = pu.repository.Update(req, updatedTime)
+
+	return
+}
+
 func (pu *ProductUsecase) Delete(req *pb.ProductDeleteRequest) (affected bool, err error) {
 	affected, err = pu.repository.Delete(req)
 

@@ -17,6 +17,15 @@ func NewProductDelivery(usecase domain.ProductUsecase) *ProductDelivery {
 	}
 }
 
+//func (pd *ProductDelivery) Delete(ctx context.Context, req *pb.) (res *pb., err error) {}
+
+func (pd *ProductDelivery) Update(ctx context.Context, req *pb.ProductUpdateRequest) (res *pb.OperationResponse, err error) {
+	affected, err := pd.usecase.Update(req)
+	res = &pb.OperationResponse{IsAffected: affected}
+
+	return
+}
+
 func (pd *ProductDelivery) Delete(ctx context.Context, req *pb.ProductDeleteRequest) (res *pb.OperationResponse, err error) {
 	affected, err := pd.usecase.Delete(req)
 	res = &pb.OperationResponse{IsAffected: affected}
