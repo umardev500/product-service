@@ -22,6 +22,23 @@ func NewProductRepository(db *mongo.Database) domain.ProductRepository {
 	}
 }
 
+func (pr *ProductRepository) Delete(req *pb.ProductDeleteRequest) (affected bool, err error) {
+	affected = true
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"product_id": req.ProductId}
+
+	resp, err := pr.products.DeleteOne(ctx, filter)
+
+	if resp.DeletedCount < 1 {
+		affected = false
+	}
+
+	return
+}
+
 // Save saves a new product in the database using the provided request data.
 func (pr *ProductRepository) Save(req *pb.ProductCreateRequest, generatedId string, createdTime int64) (err error) {
 	// Create a context with a 10 second timeout

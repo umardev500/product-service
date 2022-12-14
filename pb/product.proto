@@ -25,6 +25,11 @@ message ProductCreateRequest {
     string description = 4;
 }
 
+message ProductDeleteRequest {
+    string product_id = 1;
+}
+
 service ProductService {
     rpc Create(ProductCreateRequest) returns (Empty) {}
+    rpc Delete(ProductDeleteRequest) returns (OperationResponse) {}
 }

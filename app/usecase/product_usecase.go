@@ -20,6 +20,12 @@ func NewProductUsecase(repo domain.ProductRepository) domain.ProductUsecase {
 	}
 }
 
+func (pu *ProductUsecase) Delete(req *pb.ProductDeleteRequest) (affected bool, err error) {
+	affected, err = pu.repository.Delete(req)
+
+	return
+}
+
 // Create creates a new product with the given request and returns a boolean indicating if the product was saved successfully, and an error if one occurred.
 func (pu *ProductUsecase) Create(req *pb.ProductCreateRequest) (err error) {
 	// Get the current time in UTC
