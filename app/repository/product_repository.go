@@ -101,6 +101,8 @@ func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *p
 		products.Pages = 1
 	}
 
+	fmt.Println(rows)
+
 	products.PerPage = perPage
 	products.ActivePage = page + 1
 	if dataSize < 1 {

@@ -22,4 +22,4 @@ findone:
 	grpcurl --plaintext -d '{"product_id": "1671034841"}' localhost:5010 ProductService.FindOne
 
 findall:
-	grpcurl --plaintext localhost:5010 ProductService.FindAll
+	grpcurl --plaintext -d '{"search": "1671034841s"}' localhost:5010 ProductService.FindAll
