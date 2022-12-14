@@ -23,10 +23,7 @@ func NewProductRepository(db *mongo.Database) domain.ProductRepository {
 }
 
 // Save saves a new product in the database using the provided request data.
-func (pr *ProductRepository) Save(req *pb.ProductCreateRequest, generatedId string, createdTime int64) (affected bool, err error) {
-	// Assume the operation will be successful
-	affected = true
-
+func (pr *ProductRepository) Save(req *pb.ProductCreateRequest, generatedId string, createdTime int64) (err error) {
 	// Create a context with a 10 second timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -42,15 +39,7 @@ func (pr *ProductRepository) Save(req *pb.ProductCreateRequest, generatedId stri
 	}
 
 	// Insert the product document
-	resp, err := pr.products.InsertOne(ctx, payload)
-	if err != nil {
-		return
-	}
-
-	// If the inserted ID is nil, then the insertion failed
-	if resp.InsertedID == nil {
-		affected = false
-	}
+	_, err = pr.products.InsertOne(ctx, payload)
 
 	return
 }

@@ -17,8 +17,9 @@ func NewProductDelivery(usecase domain.ProductUsecase) *ProductDelivery {
 	}
 }
 
-func (pd *ProductDelivery) Create(ctx context.Context, req *pb.ProductCreateRequest) (*pb.OperationResponse, error) {
-	affected, err := pd.usecase.Create(req)
+func (pd *ProductDelivery) Create(ctx context.Context, req *pb.ProductCreateRequest) (res *pb.Empty, err error) {
+	err = pd.usecase.Create(req)
+	res = &pb.Empty{}
 
-	return &pb.OperationResponse{IsAffected: affected}, err
+	return
 }

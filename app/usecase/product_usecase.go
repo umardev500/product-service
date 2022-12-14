@@ -21,14 +21,14 @@ func NewProductUsecase(repo domain.ProductRepository) domain.ProductUsecase {
 }
 
 // Create creates a new product with the given request and returns a boolean indicating if the product was saved successfully, and an error if one occurred.
-func (pu *ProductUsecase) Create(req *pb.ProductCreateRequest) (affected bool, err error) {
+func (pu *ProductUsecase) Create(req *pb.ProductCreateRequest) (err error) {
 	// Get the current time in UTC
 	t := time.Now().UTC()
 
 	generatedId := strconv.Itoa(int(t.Unix()))
 	createdTime := t.Unix()
 
-	affected, err = pu.repository.Save(req, generatedId, createdTime)
+	err = pu.repository.Save(req, generatedId, createdTime)
 
 	return
 }
