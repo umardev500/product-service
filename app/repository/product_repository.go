@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"math"
 	"product/domain"
 	"product/pb"
@@ -97,11 +96,11 @@ func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *p
 	dataSize := int64(len(products.Products))
 	products.Rows = rows
 	products.Pages = int64(math.Ceil(float64(rows) / float64(perPage)))
-	if products.Pages < 1 {
+	if dataSize < 1 {
+		products.Pages = 0
+	} else if perPage == 0 {
 		products.Pages = 1
 	}
-
-	fmt.Println(rows)
 
 	products.PerPage = perPage
 	products.ActivePage = page + 1
@@ -109,8 +108,6 @@ func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *p
 		products.ActivePage = 0
 	}
 	products.Total = dataSize
-
-	fmt.Println("perpage", perPage)
 
 	return
 }
