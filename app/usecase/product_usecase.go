@@ -21,43 +21,29 @@ func NewProductUsecase(repo domain.ProductRepository) domain.ProductUsecase {
 }
 
 // func (pu *ProductUsecase) {}
-
-func (pu *ProductUsecase) FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error) {
-	products, err = pu.repository.FindAll(req)
-
-	return
-}
-
-func (pu *ProductUsecase) FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error) {
-	product, err = pu.repository.FindOne(req)
-
-	return
-}
-
-func (pu *ProductUsecase) Update(req *pb.ProductUpdateRequest) (affected bool, err error) {
-	t := time.Now()
-	updatedTime := t.Unix()
-
-	affected, err = pu.repository.Update(req, updatedTime)
-
-	return
-}
-
-func (pu *ProductUsecase) Delete(req *pb.ProductDeleteRequest) (affected bool, err error) {
-	affected, err = pu.repository.Delete(req)
-
-	return
-}
-
-// Create creates a new product with the given request and returns a boolean indicating if the product was saved successfully, and an error if one occurred.
-func (pu *ProductUsecase) Create(req *pb.ProductCreateRequest) (err error) {
+func (pu *ProductUsecase) Create(req *pb.ProductCreateRequest) error {
 	// Get the current time in UTC
 	t := time.Now().UTC()
 
 	generatedId := strconv.Itoa(int(t.UnixNano()))
 	createdTime := t.Unix()
 
-	err = pu.repository.Save(req, generatedId, createdTime)
+	return pu.repository.Save(req, generatedId, createdTime)
+}
 
-	return
+func (pu *ProductUsecase) FindOne(req *pb.ProductFindOneRequest) (*pb.Product, error) {
+	return pu.repository.FindOne(req)
+}
+
+func (pu *ProductUsecase) FindAll(req *pb.ProductFindAllRequest) (*pb.ProductFindAllResponse, error) {
+	return pu.repository.FindAll(req)
+}
+
+func (pu *ProductUsecase) Update(req *pb.ProductUpdateRequest) (bool, error) {
+	updatedTime := time.Now().Unix()
+	return pu.repository.Update(req, updatedTime)
+}
+
+func (pu *ProductUsecase) Delete(req *pb.ProductDeleteRequest) (bool, error) {
+	return pu.repository.Delete(req)
 }
