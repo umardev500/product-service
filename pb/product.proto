@@ -45,8 +45,8 @@ message ProductFindAllResponse {
     repeated Product products = 1;
     int64 rows = 2;
     int64 pages = 3;
-    int64 perPage = 4;
-    int64 activePage = 5;
+    int64 per_page = 4;
+    int64 active_page = 5;
     int64 total = 6;
 }
 
