@@ -48,6 +48,14 @@ func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *p
 						},
 					},
 				},
+				{
+					"name": bson.M{
+						"$regex": primitive.Regex{
+							Pattern: s,
+							Options: "i",
+						},
+					},
+				},
 			},
 		}
 	}
