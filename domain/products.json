@@ -1,0 +1,14 @@
+[
+  {
+    "_id": {
+      "$oid": "63e5ffdf59326d0951b0608a"
+    },
+    "product_id": "1676017631445462465",
+    "name": "Paket Premium Extra",
+    "price": 300000,
+    "duration": 30,
+    "description": "Simple description",
+    "created_at": 1676017631,
+    "updated_at": 1676550906
+  }
+]

@@ -27,9 +27,10 @@ func NewProductRepository(db *mongo.Database) domain.ProductRepository {
 
 // func (pr *ProductRepository) {}
 
-func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error) {
+func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (result *pb.ProductFindAllResponse, err error) {
 	s := req.Search
-	products = &pb.ProductFindAllResponse{}
+
+	result = &pb.ProductFindAllResponse{}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -78,6 +79,7 @@ func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *p
 
 	defer cur.Close(ctx)
 
+	var products []*pb.Product
 	for cur.Next(ctx) {
 		var each domain.Product
 
@@ -96,26 +98,36 @@ func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (products *p
 			UpdatedAt:   each.UpdatedAt,
 		}
 
-		products.Products = append(products.Products, product)
+		products = append(products, product)
+	}
+
+	if len(products) < 1 {
+		result.IsEmpty = true
+
+		return
+	}
+
+	result.Payload = &pb.ProductFindAllPayload{
+		Products: products,
 	}
 
 	rows, _ := pr.products.CountDocuments(ctx, filter)
+	dataSize := int64(len(result.Payload.Products))
 
-	dataSize := int64(len(products.Products))
-	products.Rows = rows
-	products.Pages = int64(math.Ceil(float64(rows) / float64(perPage)))
+	result.Payload.Rows = rows
+	result.Payload.Pages = int64(math.Ceil(float64(rows) / float64(perPage)))
 	if dataSize < 1 {
-		products.Pages = 0
+		result.Payload.Pages = 0
 	} else if perPage == 0 {
-		products.Pages = 1
+		result.Payload.Pages = 1
 	}
 
-	products.PerPage = perPage
-	products.ActivePage = page + 1
+	result.Payload.PerPage = perPage
+	result.Payload.ActivePage = page + 1
 	if dataSize < 1 {
-		products.ActivePage = 0
+		result.Payload.ActivePage = 0
 	}
-	products.Total = dataSize
+	result.Payload.Total = dataSize
 
 	return
 }

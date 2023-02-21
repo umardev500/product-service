@@ -35,8 +35,10 @@ func (pu *ProductUsecase) FindOne(req *pb.ProductFindOneRequest) (*pb.Product, e
 	return pu.repository.FindOne(req)
 }
 
-func (pu *ProductUsecase) FindAll(req *pb.ProductFindAllRequest) (*pb.ProductFindAllResponse, error) {
-	return pu.repository.FindAll(req)
+func (pu *ProductUsecase) FindAll(req *pb.ProductFindAllRequest) (res *pb.ProductFindAllResponse, err error) {
+	res, err = pu.repository.FindAll(req)
+
+	return
 }
 
 func (pu *ProductUsecase) Update(req *pb.ProductUpdateRequest) (bool, error) {
