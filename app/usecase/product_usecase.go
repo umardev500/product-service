@@ -31,7 +31,7 @@ func (pu *ProductUsecase) Create(req *pb.ProductCreateRequest) error {
 	return pu.repository.Save(req, generatedId, createdTime)
 }
 
-func (pu *ProductUsecase) FindOne(req *pb.ProductFindOneRequest) (*pb.Product, error) {
+func (pu *ProductUsecase) FindOne(req *pb.ProductFindOneRequest) (*pb.ProductFindOneResponse, error) {
 	return pu.repository.FindOne(req)
 }
 

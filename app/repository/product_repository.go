@@ -132,7 +132,7 @@ func (pr *ProductRepository) FindAll(req *pb.ProductFindAllRequest) (result *pb.
 	return
 }
 
-func (pr *ProductRepository) FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error) {
+func (pr *ProductRepository) FindOne(req *pb.ProductFindOneRequest) (res *pb.ProductFindOneResponse, err error) {
 	var result domain.Product
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -141,11 +141,18 @@ func (pr *ProductRepository) FindOne(req *pb.ProductFindOneRequest) (product *pb
 	filter := bson.M{"product_id": req.ProductId}
 
 	err = pr.products.FindOne(ctx, filter).Decode(&result)
+	if err == mongo.ErrNoDocuments {
+		res = &pb.ProductFindOneResponse{IsEmpty: true}
+		err = nil
+
+		return
+	}
+
 	if err != nil {
 		return
 	}
 
-	product = &pb.Product{
+	product := &pb.Product{
 		ProductId:   result.ProductId,
 		Name:        result.Name,
 		Price:       result.Price,
@@ -153,6 +160,10 @@ func (pr *ProductRepository) FindOne(req *pb.ProductFindOneRequest) (product *pb
 		Description: result.Description,
 		CreatedAt:   result.CreatedAt,
 		UpdatedAt:   result.UpdatedAt,
+	}
+
+	res = &pb.ProductFindOneResponse{
+		Payload: product,
 	}
 
 	return

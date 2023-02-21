@@ -19,7 +19,7 @@ type ProductUsecase interface {
 	Create(req *pb.ProductCreateRequest) error
 	Delete(req *pb.ProductDeleteRequest) (affected bool, err error)
 	Update(req *pb.ProductUpdateRequest) (affected bool, err error)
-	FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error)
+	FindOne(req *pb.ProductFindOneRequest) (product *pb.ProductFindOneResponse, err error)
 	FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error)
 }
 
@@ -30,6 +30,6 @@ type ProductRepository interface {
 	Save(req *pb.ProductCreateRequest, generatedId string, createdTime int64) error
 	Delete(req *pb.ProductDeleteRequest) (affected bool, err error)
 	Update(req *pb.ProductUpdateRequest, updatedTime int64) (affected bool, err error)
-	FindOne(req *pb.ProductFindOneRequest) (product *pb.Product, err error)
+	FindOne(req *pb.ProductFindOneRequest) (product *pb.ProductFindOneResponse, err error)
 	FindAll(req *pb.ProductFindAllRequest) (products *pb.ProductFindAllResponse, err error)
 }

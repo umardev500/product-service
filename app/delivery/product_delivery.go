@@ -25,7 +25,7 @@ func (pd *ProductDelivery) FindAll(ctx context.Context, req *pb.ProductFindAllRe
 	return
 }
 
-func (pd *ProductDelivery) FindOne(ctx context.Context, req *pb.ProductFindOneRequest) (res *pb.Product, err error) {
+func (pd *ProductDelivery) FindOne(ctx context.Context, req *pb.ProductFindOneRequest) (res *pb.ProductFindOneResponse, err error) {
 	res, err = pd.usecase.FindOne(req)
 
 	return

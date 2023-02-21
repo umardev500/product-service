@@ -55,10 +55,15 @@ message ProductFindAllResponse {
     ProductFindAllPayload payload = 2;
 }
 
+message ProductFindOneResponse {
+    bool is_empty = 1;
+    Product payload = 2;
+}
+
 service ProductService {
     rpc Create(ProductCreateRequest) returns (Empty) {}
     rpc Delete(ProductDeleteRequest) returns (OperationResponse) {}
     rpc Update(ProductUpdateRequest) returns (OperationResponse) {}
-    rpc FindOne(ProductFindOneRequest) returns (Product) {}
+    rpc FindOne(ProductFindOneRequest) returns (ProductFindOneResponse) {}
     rpc FindAll(ProductFindAllRequest) returns (ProductFindAllResponse) {}
 }

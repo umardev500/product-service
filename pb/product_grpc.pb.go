@@ -25,7 +25,7 @@ type ProductServiceClient interface {
 	Create(ctx context.Context, in *ProductCreateRequest, opts ...grpc.CallOption) (*Empty, error)
 	Delete(ctx context.Context, in *ProductDeleteRequest, opts ...grpc.CallOption) (*OperationResponse, error)
 	Update(ctx context.Context, in *ProductUpdateRequest, opts ...grpc.CallOption) (*OperationResponse, error)
-	FindOne(ctx context.Context, in *ProductFindOneRequest, opts ...grpc.CallOption) (*Product, error)
+	FindOne(ctx context.Context, in *ProductFindOneRequest, opts ...grpc.CallOption) (*ProductFindOneResponse, error)
 	FindAll(ctx context.Context, in *ProductFindAllRequest, opts ...grpc.CallOption) (*ProductFindAllResponse, error)
 }
 
@@ -64,8 +64,8 @@ func (c *productServiceClient) Update(ctx context.Context, in *ProductUpdateRequ
 	return out, nil
 }
 
-func (c *productServiceClient) FindOne(ctx context.Context, in *ProductFindOneRequest, opts ...grpc.CallOption) (*Product, error) {
-	out := new(Product)
+func (c *productServiceClient) FindOne(ctx context.Context, in *ProductFindOneRequest, opts ...grpc.CallOption) (*ProductFindOneResponse, error) {
+	out := new(ProductFindOneResponse)
 	err := c.cc.Invoke(ctx, "/ProductService/FindOne", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -89,7 +89,7 @@ type ProductServiceServer interface {
 	Create(context.Context, *ProductCreateRequest) (*Empty, error)
 	Delete(context.Context, *ProductDeleteRequest) (*OperationResponse, error)
 	Update(context.Context, *ProductUpdateRequest) (*OperationResponse, error)
-	FindOne(context.Context, *ProductFindOneRequest) (*Product, error)
+	FindOne(context.Context, *ProductFindOneRequest) (*ProductFindOneResponse, error)
 	FindAll(context.Context, *ProductFindAllRequest) (*ProductFindAllResponse, error)
 	mustEmbedUnimplementedProductServiceServer()
 }
@@ -107,7 +107,7 @@ func (UnimplementedProductServiceServer) Delete(context.Context, *ProductDeleteR
 func (UnimplementedProductServiceServer) Update(context.Context, *ProductUpdateRequest) (*OperationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedProductServiceServer) FindOne(context.Context, *ProductFindOneRequest) (*Product, error) {
+func (UnimplementedProductServiceServer) FindOne(context.Context, *ProductFindOneRequest) (*ProductFindOneResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
 }
 func (UnimplementedProductServiceServer) FindAll(context.Context, *ProductFindAllRequest) (*ProductFindAllResponse, error) {
